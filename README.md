@@ -7,7 +7,7 @@ Instruction to run it.
 * create a virtual environment: python3 -m venv venv
 * install dependencies: venv/bin/pip install -r requierements.txt
 * create an empty directory: mkdir learning
-* create a music catalog for the training: PYTHONPATH=. venv/bin/python3 music_generator/create_music_catalog.py learning/catalog <directory with midi files to learn from>/*.mid
+* create a music catalog for the training: PYTHONPATH=. venv/bin/python3 music_generator/create_music_catalog.py learning/catalog < directory with midi files to learn from >/*.mid
 * train a model: PYTHONPATH=. venv/bin/python3 music_generator/train_model.py learning/catalog learning/weights 100
 
 That will take a while (over a day on my laptop)
