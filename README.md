@@ -9,9 +9,11 @@ Instruction to run it.
 * create an empty directory: mkdir learning
 * create a music catalog for the training: PYTHONPATH=. venv/bin/python3 music_generator/create_music_catalog.py learning/catalog <directory with midi files to learn from>/*.mid
 * train a model: PYTHONPATH=. venv/bin/python3 music_generator/train_model.py learning/catalog learning/weights 100
-  That will take a while (over a day on my laptop)
+
+That will take a while (over a day on my laptop)
 * generate new music: PYTHONPATH=. venv/bin/python3 music_generator/generate_music.py learning/catalog learning/weights learning/score 2000 0
-  Slow, but much faster than previous step
+
+Slow, but much faster than previous step
 * convert score to midi file: PYTHONPATH=. venv/bin/python3 music_generator/score_to_midi.py learning/score learning/music.mid
   
 Optional steps:
