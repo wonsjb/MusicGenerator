@@ -1,7 +1,7 @@
 import sys
 from tqdm import tqdm
 import mido
-from music_generator.note import Note
+from .note import Note
 import pickle
 
 
@@ -38,18 +38,19 @@ def midi_to_score(midi, score, score_time):
     return score
 
 
-if len(sys.argv) < 3:
-    print("Usage: {} <music catalog> <midi files>".format(sys.argv[0]))
-    exit(0)
+def main():
+    if len(sys.argv) < 3:
+        print("Usage: {} <music catalog> <midi files>".format(sys.argv[0]))
+        exit(0)
 
-the_score = []
-the_score_time = []
+    the_score = []
+    the_score_time = []
 
-for file in tqdm(sys.argv[2:], "Opening files"):
-    if file.endswith(".mid"):
-        midi_to_score(mido.MidiFile(file), the_score, the_score_time)
+    for file in tqdm(sys.argv[2:], "Opening files"):
+        if file.endswith(".mid"):
+            midi_to_score(mido.MidiFile(file), the_score, the_score_time)
 
 
-f = open(sys.argv[1], 'wb')
-pickle.dump(the_score, f)
-f.close()
+    f = open(sys.argv[1], 'wb')
+    pickle.dump(the_score, f)
+    f.close()
