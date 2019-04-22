@@ -16,19 +16,20 @@ def save_events(track, events):
             track.append(msg)
 
 
-if len(sys.argv) != 3:
-    print("Usage: {} <score> <midi file>".format(sys.argv[0]))
-    exit(0)
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: {} <score> <midi file>".format(sys.argv[0]))
+        exit(0)
 
 
-midi_file= mido.MidiFile()
-midi_track = mido.MidiTrack()
-midi_file.tracks.append(midi_track)
+    midi_file= mido.MidiFile()
+    midi_track = mido.MidiTrack()
+    midi_file.tracks.append(midi_track)
 
-f = open(sys.argv[1], 'rb')
-music = pickle.load(f)
-f.close()
+    f = open(sys.argv[1], 'rb')
+    music = pickle.load(f)
+    f.close()
 
-save_events(midi_track, score_to_events(music))
+    save_events(midi_track, score_to_events(music))
 
-midi_file.save(sys.argv[2])
+    midi_file.save(sys.argv[2])

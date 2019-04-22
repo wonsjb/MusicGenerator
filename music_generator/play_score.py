@@ -16,14 +16,15 @@ def play_events(port_name, events):
                 port.send(msg)
 
 
-if len(sys.argv) != 3:
-    print("Usage: {} <midi port id> <score>".format(sys.argv[0]))
-    exit(0)
+def main():
+    if len(sys.argv) != 3:
+        print("Usage: {} <midi port id> <score>".format(sys.argv[0]))
+        exit(0)
 
 
-f = open(sys.argv[2], 'rb')
-music = pickle.load(f)
-f.close()
+    f = open(sys.argv[2], 'rb')
+    music = pickle.load(f)
+    f.close()
 
 
-play_events(mido.get_output_names()[int(sys.argv[1])], score_to_events(music))
+    play_events(mido.get_output_names()[int(sys.argv[1])], score_to_events(music))

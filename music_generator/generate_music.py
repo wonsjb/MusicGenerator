@@ -41,22 +41,23 @@ def generate_music(model, start_notes, conv, num_generate, temperature):
     return score
 
 
-if len(sys.argv) != 6:
-    print("Usage: {} <music catalog> <model weight> <output score> <note count> <randomness>".format(sys.argv[0]))
-    exit(0)
+def main():
+    if len(sys.argv) != 6:
+        print("Usage: {} <music catalog> <model weight> <output score> <note count> <randomness>".format(sys.argv[0]))
+        exit(0)
 
 
-f = open(sys.argv[1], 'rb')
-the_score = pickle.load(f)
-f.close()
+    f = open(sys.argv[1], 'rb')
+    the_score = pickle.load(f)
+    f.close()
 
-converter = VocabConverter(the_score)
+    converter = VocabConverter(the_score)
 
-music_model = build_model(1, converter.vocab)
-music_model.load_weights(sys.argv[2])
-new_music = generate_music(music_model, the_score[:20], converter, int(sys.argv[4]), float(sys.argv[5]))
+    music_model = build_model(1, converter.vocab)
+    music_model.load_weights(sys.argv[2])
+    new_music = generate_music(music_model, the_score[:20], converter, int(sys.argv[4]), float(sys.argv[5]))
 
 
-f = open(sys.argv[3], 'wb')
-pickle.dump(new_music, f)
-f.close()
+    f = open(sys.argv[3], 'wb')
+    pickle.dump(new_music, f)
+    f.close()

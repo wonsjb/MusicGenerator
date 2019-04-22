@@ -45,30 +45,31 @@ def train(model, dataset, epoch_count):
         print('Epoch {} Loss {:.4f}'.format(epoch, loss))
 
 
-if len(sys.argv) != 4:
-    print("Usage: {} <music catalog> <model weight> <epoch count>".format(sys.argv[0]))
-    exit(0)
+def main():
+    if len(sys.argv) != 4:
+        print("Usage: {} <music catalog> <model weight> <epoch count>".format(sys.argv[0]))
+        exit(0)
 
-f = open(sys.argv[1], 'rb')
-the_score = pickle.load(f)
-f.close()
+    f = open(sys.argv[1], 'rb')
+    the_score = pickle.load(f)
+    f.close()
 
-converter = VocabConverter(the_score)
-the_score_as_int = converter.score_to_int(the_score)
+    converter = VocabConverter(the_score)
+    the_score_as_int = converter.score_to_int(the_score)
 
-# print([len(x) for x in converter.vocab])
+    # print([len(x) for x in converter.vocab])
 
-score_dataset = tf.data.Dataset.from_tensor_slices(the_score_as_int)
-examples_per_epoch = len(the_score_as_int)//seq_length
-sequences = score_dataset.batch(seq_length+1, drop_remainder=True)
+    score_dataset = tf.data.Dataset.from_tensor_slices(the_score_as_int)
+    examples_per_epoch = len(the_score_as_int)//seq_length
+    sequences = score_dataset.batch(seq_length+1, drop_remainder=True)
 
-dataset = sequences.map(split_input_target)
+    dataset = sequences.map(split_input_target)
 
-steps_per_epoch = examples_per_epoch//BATCH_SIZE
+    steps_per_epoch = examples_per_epoch//BATCH_SIZE
 
-dataset = dataset.batch(BATCH_SIZE, drop_remainder=True).map(
-    lambda x, y: (tf.transpose(x, perm=[2, 0, 1]), tf.transpose(y, perm=[2, 0, 1])))
+    dataset = dataset.batch(BATCH_SIZE, drop_remainder=True).map(
+        lambda x, y: (tf.transpose(x, perm=[2, 0, 1]), tf.transpose(y, perm=[2, 0, 1])))
 
-music_model = build_model(BATCH_SIZE, converter.vocab)
-train(music_model, dataset, int(sys.argv[3]))
-music_model.save_weights(sys.argv[2])
+    music_model = build_model(BATCH_SIZE, converter.vocab)
+    train(music_model, dataset, int(sys.argv[3]))
+    music_model.save_weights(sys.argv[2])

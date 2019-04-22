@@ -2,3 +2,4 @@ venv
 .idea
 learning
 music_generator/__pycache__
+music_generator.egg-info/
