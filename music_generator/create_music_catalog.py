@@ -48,7 +48,10 @@ def main():
 
     for file in tqdm(sys.argv[2:], "Opening files"):
         if file.endswith(".mid"):
-            midi_to_score(mido.MidiFile(file), the_score, the_score_time)
+            try:
+                midi_to_score(mido.MidiFile(file), the_score, the_score_time)
+            except:
+                print("Could not read file:", file)
 
 
     f = open(sys.argv[1], 'wb')
