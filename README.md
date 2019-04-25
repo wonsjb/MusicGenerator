@@ -13,6 +13,9 @@ Instruction to run it.
 Important note: For the first run, do not put anything in the learning directory. If you still do, do not clash with the files that are being generated. For instance, do not create a catalog directory in the learning directory.
 
 * create a music catalog for the training: `create-music-catalog learning/catalog < directory with midi files to learn from >/*.mid`
+
+Make sure to have a couple midi files. If you don't have enough data to train on, the next step will fail with an obscure error.
+
 * train a model: `train-model learning/catalog learning/weights 100`
 
 That will take a while (over a day on my laptop)
