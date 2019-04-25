@@ -18,7 +18,7 @@ Make sure to have a couple midi files. If you don't have enough data to train on
 
 * train a model: `train-model learning/catalog learning/weights 100`
 
-That will take a while (over a day on my laptop)
+That will take a while (over a day on my laptop). If you want a quick result just to test it all works, replace 100 by 1
 
 * generate new music: `generate-music learning/catalog learning/weights learning/score 2000 0`
 
