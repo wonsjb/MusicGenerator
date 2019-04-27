@@ -20,7 +20,7 @@ def print_class(headers, file):
     file.write("):\n")
     for header in headers:
         file.write("        self.{} = {}\n".format(header, header))
-    file.write("\n\ndata = []\n")
+    file.write("\n\ndata = [\n")
 
 
 def to_code(string):
@@ -34,7 +34,7 @@ def to_code(string):
 
 def print_item(data, file):
     data = [to_code(x) for x in data]
-    file.write("data.append(Item({}))\n".format(", ".join(data)))
+    file.write("    Item({}),\n".format(", ".join(data)))
 
 
 @click.command()
@@ -49,6 +49,7 @@ def cli(csv_file, python_file):
             print_class(row, python_file)
         else:
             print_item(row, python_file)
+    python_file.write("]\n")
 
 
 def main():
