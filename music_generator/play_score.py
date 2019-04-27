@@ -1,7 +1,6 @@
 import pickle
 import mido
 import time
-import sys
 from tqdm import tqdm
 from music_generator.score_util import score_to_events
 
@@ -16,15 +15,8 @@ def play_events(port_name, events):
                 port.send(msg)
 
 
-def main():
-    if len(sys.argv) != 3:
-        print("Usage: {} <midi port id> <score>".format(sys.argv[0]))
-        exit(0)
+def main(score_file, midi_port):
+    score = pickle.load(score_file)
+    score_file.close()
 
-
-    f = open(sys.argv[2], 'rb')
-    music = pickle.load(f)
-    f.close()
-
-
-    play_events(mido.get_output_names()[int(sys.argv[1])], score_to_events(music))
+    play_events(mido.get_output_names()[midi_port], score_to_events(score))

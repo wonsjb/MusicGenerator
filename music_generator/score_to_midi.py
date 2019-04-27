@@ -1,5 +1,4 @@
 import mido
-import sys
 import pickle
 from tqdm import tqdm
 from music_generator.score_util import score_to_events
@@ -16,20 +15,16 @@ def save_events(track, events):
             track.append(msg)
 
 
-def main():
-    if len(sys.argv) != 3:
-        print("Usage: {} <score> <midi file>".format(sys.argv[0]))
-        exit(0)
-
-
-    midi_file= mido.MidiFile()
+def save_to_midi(score, midi_file):
+    midi = mido.MidiFile()
     midi_track = mido.MidiTrack()
-    midi_file.tracks.append(midi_track)
+    midi.tracks.append(midi_track)
+    save_events(midi_track, score_to_events(score))
+    midi.save(midi_file)
 
-    f = open(sys.argv[1], 'rb')
-    music = pickle.load(f)
-    f.close()
 
-    save_events(midi_track, score_to_events(music))
+def main(score_file, midi_file):
+    score = pickle.load(score_file)
+    score_file.close()
 
-    midi_file.save(sys.argv[2])
+    save_to_midi(score, midi_file.name)

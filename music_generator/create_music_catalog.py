@@ -1,4 +1,3 @@
-import sys
 from tqdm import tqdm
 import mido
 from .note import Note
@@ -38,22 +37,17 @@ def midi_to_score(midi, score, score_time):
     return score
 
 
-def main():
-    if len(sys.argv) < 3:
-        print("Usage: {} <music catalog> <midi files>".format(sys.argv[0]))
-        exit(0)
+def main(music_catalog_file, midi_files):
 
     the_score = []
     the_score_time = []
 
-    for file in tqdm(sys.argv[2:], "Opening files"):
+    for file in tqdm(midi_files, "Opening files"):
         if file.endswith(".mid"):
             try:
                 midi_to_score(mido.MidiFile(file), the_score, the_score_time)
             except:
                 print("Could not read file:", file)
 
-
-    f = open(sys.argv[1], 'wb')
-    pickle.dump(the_score, f)
-    f.close()
+    pickle.dump(the_score, music_catalog_file)
+    music_catalog_file.close()

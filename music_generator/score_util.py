@@ -5,7 +5,7 @@ from tqdm import tqdm
 def score_to_events(score):
     current_time = 0
     events = {}
-    for msg in tqdm(score, "Loading score"):
+    for msg in tqdm(score, "Converting score to events"):
         current_time += msg.pause
         if current_time not in events:
             events[current_time] = []

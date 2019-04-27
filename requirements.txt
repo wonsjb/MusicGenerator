@@ -2,3 +2,4 @@ mido
 python-rtmidi
 tensorflow
 tqdm
+click
