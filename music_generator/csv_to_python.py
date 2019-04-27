@@ -13,7 +13,7 @@ def is_number_tryexcept(s):
 
 def print_class(headers, file):
     file.write("class Item:\n")
-    file.write("    def __init__(self");
+    file.write("    def __init__(self")
     for header in headers:
         file.write(", ")
         file.write(header)

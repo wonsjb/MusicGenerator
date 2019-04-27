@@ -21,18 +21,19 @@ def split_input_target(chunk):
 
 def train(model, dataset, epoch_count):
     optimizer = tf.train.AdamOptimizer()
-    # Training step
+
     for epoch in range(epoch_count):
         model.reset_states()
 
         count = 0
+        loss = 0
         for (_, _) in dataset:
             count = count + 1
 
-        for (batch_n, (inp, target)) in tqdm(enumerate(dataset), "Training epoch {}/{}".format(epoch, epoch_count - 1), count):
+        for (batch_n, (inp, target)) in tqdm(enumerate(dataset),
+                                             "Training epoch {}/{}".format(epoch, epoch_count - 1),
+                                             count):
             with tf.GradientTape() as tape:
-                # feeding the hidden state back into the model
-                # This is the interesting step
                 predictions = model([x for x in inp])
                 loss = loss_func(target, predictions)
 
