@@ -4,50 +4,70 @@ from .note import Note
 import pickle
 
 
-def midi_to_score(midi, score, score_time):
-    start_times = {}
-    current_time = 0
-    if len(score_time) > 0:
-        current_time = score_time[-1]
+def midi_to_score(midi, score, start_time, channel):
+    current_time = start_time
+    previous_time = current_time
+    currently_played_notes = {}
     for msg in midi:
         msgtime = int(msg.time * 1000)
         current_time = current_time + msgtime
-
         if isinstance(msg, mido.MetaMessage):
             continue
 
         if msg.type == 'note_on':
-            if msg.velocity == 0:
-                if msg.note in start_times:
-                    current_length = current_time - start_times[msg.note][1]
-                    score[start_times[msg.note][0]].duration = current_length
-                    del start_times[msg.note]
-            else:
-                if msg.note in start_times:
-                    current_length = current_time - start_times[msg.note][1]
-                    score[start_times[msg.note][0]].duration = current_length
+            if msg.channel != channel:
+                continue
 
-                start_times[msg.note] = (len(score), current_time)
-                pause = 0
-                if len(score) > 0:
-                    pause = current_time - score_time[-1]
-                score.append(Note(msg.note, msg.velocity, 0, pause))
-                score_time.append(current_time)
+            end_note_and_set_duration(current_time, msg, currently_played_notes)
 
-    return score
+            if msg.velocity != 0:
+                pause = current_time - previous_time
+                previous_time = current_time
+                new_note = Note(msg.note, msg.velocity, 0, pause)
+                currently_played_notes[msg.note] = (new_note, current_time)
+                score.append(new_note)
+
+        elif msg.type == 'note_off':
+            if msg.channel != channel:
+                continue
+
+            end_note_and_set_duration(current_time, msg, currently_played_notes)
+        elif msg.type == 'program_change':
+            pass
+        elif msg.type == 'control_change':
+            pass
+        elif msg.type == 'sysex':
+            pass
+        elif msg.type == 'pitchwheel':
+            pass
+        elif msg.type == 'aftertouch':
+            pass
+        else:
+            print("Unknown message type:", msg.type)
+
+    if len(currently_played_notes) > 0:
+        print(currently_played_notes)
+    return current_time
+
+
+def end_note_and_set_duration(current_time, msg, currently_played_notes):
+    if msg.note in currently_played_notes:
+        current_length = current_time - currently_played_notes[msg.note][1]
+        currently_played_notes[msg.note][0].duration = current_length
+        del currently_played_notes[msg.note]
 
 
 def main(music_catalog_file, midi_files):
 
-    the_score = []
-    the_score_time = []
+    catalog = []
+    start_time = 0
 
-    for file in tqdm(midi_files, "Opening files"):
+    for file in tqdm(midi_files, "Reading files"):
         if file.endswith(".mid"):
             try:
-                midi_to_score(mido.MidiFile(file), the_score, the_score_time)
-            except:
+                start_time = midi_to_score(mido.MidiFile(file), catalog, start_time, 0)
+            except mido.midifiles.meta.KeySignatureError:
                 print("Could not read file:", file)
 
-    pickle.dump(the_score, music_catalog_file)
+    pickle.dump(catalog, music_catalog_file)
     music_catalog_file.close()
