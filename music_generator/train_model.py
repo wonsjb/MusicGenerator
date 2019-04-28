@@ -19,16 +19,15 @@ def split_input_target(chunk):
     return input_text, target_text
 
 
-def train(model, dataset, epoch_count):
+def train(model, dataset, epoch_count, weight_prefix):
     optimizer = tf.train.AdamOptimizer()
+    count = 0
+    for _ in dataset:
+        count = count + 1
 
     for epoch in range(epoch_count):
         model.reset_states()
-
-        count = 0
         loss = 0
-        for (_, _) in dataset:
-            count = count + 1
 
         for (batch_n, (inp, target)) in tqdm(enumerate(dataset),
                                              "Training epoch {}/{}".format(epoch, epoch_count - 1),
@@ -41,6 +40,7 @@ def train(model, dataset, epoch_count):
             optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
         print('Epoch {} Loss {:.4f}'.format(epoch, loss))
+        model.save_weights(weight_prefix)
 
 
 def main(catalog_file, weight_prefix, epoch_count):
@@ -65,5 +65,4 @@ def main(catalog_file, weight_prefix, epoch_count):
     except tf.errors.NotFoundError:
         pass
 
-    train(music_model, dataset, epoch_count)
-    music_model.save_weights(weight_prefix)
+    train(music_model, dataset, epoch_count, weight_prefix)
