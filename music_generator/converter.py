@@ -2,6 +2,9 @@ from .note import Note
 import numpy as np
 
 
+index_name = ["note", "velocity", "duration", "pause"]
+
+
 class VocabConverter:
     def __init__(self, score):
         vocab = [set(), set(), set(), set()]

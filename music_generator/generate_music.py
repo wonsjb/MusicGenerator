@@ -48,7 +48,7 @@ def main(music_catalog_file, weight_prefix, output_score, prime_count, note_coun
 
     converter = VocabConverter(the_score)
 
-    music_model = build_model(1, converter.vocab)
+    music_model = build_model(1, converter.vocab, False)
     music_model.load_weights(weight_prefix)
     new_music = generate_music(music_model, prime_count, converter, note_count, randomness)
 

@@ -11,7 +11,7 @@ import music_generator.print_score as print_score_main
 
 def fix_weight_prefix(weights_prefix, catalog_file):
     if len(weights_prefix) == 0:
-        weights_prefix = catalog_file.name + ".weights"
+        weights_prefix = catalog_file.name + ".weights.h5"
     return weights_prefix
 
 

@@ -40,7 +40,10 @@ def train(model, dataset, epoch_count, weight_prefix):
             optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
         print('Epoch {} Loss {:.4f}'.format(epoch, loss))
-        model.save_weights(weight_prefix)
+        if weight_prefix.endswith(".h5"):
+            model.save_weights(weight_prefix, save_format="h5")
+        else:
+            model.save_weights(weight_prefix)
 
 
 def main(catalog_file, weight_prefix, epoch_count):
@@ -59,9 +62,10 @@ def main(catalog_file, weight_prefix, epoch_count):
     dataset = dataset.batch(BATCH_SIZE, drop_remainder=True).map(
         lambda x, y: (tf.transpose(x, perm=[2, 0, 1]), tf.transpose(y, perm=[2, 0, 1])))
 
-    music_model = build_model(BATCH_SIZE, converter.vocab)
+    music_model = build_model(BATCH_SIZE, converter.vocab, True)
     try:
         music_model.load_weights(weight_prefix)
+        print("Loaded weights from file {}".format(weight_prefix))
     except tf.errors.NotFoundError:
         pass
 
