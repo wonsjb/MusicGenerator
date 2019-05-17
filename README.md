@@ -6,8 +6,7 @@ Instruction to run it.
 * Cd into the repo
 * Create a virtual environment: `python3 -m venv venv`
 * Source the environment: `. venv/bin/activate`
-* Install dependencies: `pip3 install -r requirements.txt`
-* Install software into virtual environmnent: `python3 setup.py develop`
+* Install software and dependencies into virtual environmnent: `python3 setup.py develop`
 * Create an empty directory: `mkdir learning`
 
 Important note: For the first run, do not put anything in the learning directory. If you still do, do not clash with the files that are being generated. For instance, do not create a catalog directory in the learning directory.
