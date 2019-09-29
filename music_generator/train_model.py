@@ -66,7 +66,7 @@ def main(catalog_file, weight_prefix, epoch_count):
     try:
         music_model.load_weights(weight_prefix)
         print("Loaded weights from file {}".format(weight_prefix))
-    except tf.errors.NotFoundError:
+    except (tf.errors.NotFoundError, OSError):
         pass
 
     train(music_model, dataset, epoch_count, weight_prefix)
