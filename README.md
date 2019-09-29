@@ -7,6 +7,7 @@ Instruction to run it.
 * Create a virtual environment: `python3 -m venv venv`
 * Source the environment: `. venv/bin/activate`
 * Install software and dependencies into virtual environmnent: `python3 setup.py develop`
+  Note: for this step, you might have to install some packages on a clean linux distrib. I had to install g++, the python3 dev headers, alsa and jack2 devel packages. Basically, look at the missing files, search what package your distribution has them, and install those packages.
 * Create an empty directory: `mkdir learning`
 
 Important note: For the first run, do not put anything in the learning directory. If you still do, do not clash with the files that are being generated. For instance, do not create a catalog directory in the learning directory.
